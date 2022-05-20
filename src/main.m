@@ -39,8 +39,13 @@ struct entry* currentPID;
 int status;
 // Pointer to the next line of output from pgrep's stdout.
 char* line = NULL;
-// The resulting window ID.
+#if DEBUG
+// If a window has been found, what is it?
 NSDictionary* found_window = NULL;
+#else
+// Has a window been found?.
+bool found_window = false;
+#endif
 // The set of current windows.
 struct WindowSet* window_set;
 
@@ -80,11 +85,13 @@ int main(int argc, char** argv) {
 			if (currentPID->pid == window_set->windows[i].ownerPID) {
 #if DEBUG
 				found_window = window_set->windows[i].winInfo;
+#else
+				found_window = true;
 #endif
 				break;
 			}
 		}
-		if (found_window != NULL) {
+		if (found_window) {
 			break;
 		} else {
 			status = snprintf(cmdbuf, BUFSZ, "pgrep -P %d", currentPID->pid);
@@ -110,7 +117,7 @@ int main(int argc, char** argv) {
 		STAILQ_REMOVE_HEAD(&head, entries);
 		free(currentPID);
 	}
-	if (found_window != NULL) {
+	if (found_window) {
 #if DEBUG
 		CFShow(CFDictionaryGetValue((CFDictionaryRef)found_window, kCGWindowNumber));
 		printf("PID: %d\n", currentPID->pid);
