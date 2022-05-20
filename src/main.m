@@ -78,7 +78,9 @@ int main(int argc, char** argv) {
 		// Check: is the current pid associated with any of the windows?
 		for (i = 0; i < window_set->len; i++) {
 			if (currentPID->pid == window_set->windows[i].ownerPID) {
+#if DEBUG
 				found_window = window_set->windows[i].winInfo;
+#endif
 				break;
 			}
 		}
@@ -109,9 +111,10 @@ int main(int argc, char** argv) {
 		free(currentPID);
 	}
 	if (found_window != NULL) {
-		CGWindowID temp;
+#if DEBUG
 		CFShow(CFDictionaryGetValue((CFDictionaryRef)found_window, kCGWindowNumber));
 		printf("PID: %d\n", currentPID->pid);
+#endif
 		AXUIElementRef element = AXUIElementCreateApplication(currentPID->pid);
 		AXUIElementSetAttributeValue(element, kAXFrontmostAttribute, kCFBooleanTrue);
 		AXUIElementSetAttributeValue(element, kAXMainAttribute, kCFBooleanTrue);
@@ -123,9 +126,11 @@ int main(int argc, char** argv) {
 	}
 	free(cmdbuf);
 	cmdbuf = NULL;
+#if DEBUG
 	for (i = 0; i < window_set->len; i++) {
 		CFRelease(window_set->windows[i].winInfo);
 	}
+#endif
 	free(window_set->windows);
 	free(window_set);
 	while (!STAILQ_EMPTY(&head)) {

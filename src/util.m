@@ -50,8 +50,10 @@ struct WindowSet* get_window_array() {
 			fprintf(stderr, "CFNumber -> pid_t conversion failed!\n");
 			exit(2);
 		}
+#if DEBUG
 		result->windows[i].winInfo = window;
 		CFRetain(window);
+#endif
 		i++;
 	}
 	CFRelease(windows);
