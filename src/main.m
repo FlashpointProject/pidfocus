@@ -112,6 +112,9 @@ int main(int argc, char** argv) {
 		CGWindowID temp;
 		CFShow(CFDictionaryGetValue((CFDictionaryRef)found_window, kCGWindowNumber));
 		printf("PID: %d\n", currentPID->pid);
+		AXUIElementRef element = AXUIElementCreateApplication(currentPID->pid);
+		AXUIElementSetAttributeValue(element, kAXFrontmostAttribute, kCFBooleanTrue);
+		AXUIElementSetAttributeValue(element, kAXMainAttribute, kCFBooleanTrue);
 	}
 
 	if (line != NULL) {
