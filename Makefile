@@ -1,7 +1,7 @@
 CC = clang
 CFLAGS = -O2
 CFLAGS_DEBUG = -gdwarf -DDEBUG=1 -Og
-LDFLAGS = -framework Foundation -framework CFNetwork -framework ApplicationServices
+LDFLAGS = -framework Foundation -framework ApplicationServices
 
 .PHONY: release debug clean
 
